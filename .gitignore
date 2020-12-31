@@ -15,4 +15,5 @@ out/
 /cmake-build-debug/
 /pkg/
 regextoken.so
-regex/regextoken.h
+regextoken.h
+src/github.com

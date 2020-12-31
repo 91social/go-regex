@@ -1,6 +1,6 @@
 # Go cmake configuration
 cmake_minimum_required(VERSION 3.15)
-project(episilia-regex)
+project(go-regex)
 find_library(golang REQUIRED)
 
 set(TARGET ${PROJECT_NAME})
