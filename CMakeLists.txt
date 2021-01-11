@@ -2,36 +2,38 @@
 cmake_minimum_required(VERSION 3.15)
 project(go-regex)
 find_library(golang REQUIRED)
-
-set(TARGET ${PROJECT_NAME})
 set(GOPATH ${CMAKE_CURRENT_BINARY_DIR})
-
 set(SRCS src/regextoken.go)
-set(LIB regextoken.so)
-set(HEADER regextoken.h)
 #[[go build -o ./build/regextoken.so -buildmode=c-shared ./src/regextoken.go]]
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${LIB}
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/libregex)
+set(LIB ${CMAKE_CURRENT_SOURCE_DIR}/libregex/regextoken.so)
+set(HEADER ${CMAKE_CURRENT_SOURCE_DIR}/libregex/regextoken.h)
+add_custom_target(${CMAKE_PROJECT_NAME})
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+        PRE_BUILD
+        BYPRODUCTS ${LIB} ${HEADER}
         DEPENDS ${SRCS}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND cd src && env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go get -t -v github.com/google/codesearch/index/... && cd ..
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go build -buildmode=c-shared
-        -o "${CMAKE_CURRENT_SOURCE_DIR}/${LIB}" "${CMAKE_CURRENT_SOURCE_DIR}/src/regextoken.go"
+        -o "${LIB}" "${CMAKE_CURRENT_SOURCE_DIR}/src/regextoken.go"
         ${CMAKE_GO_FLAGS}
         COMMENT "Building target ${TARGET}")
-
-add_custom_target(${TARGET} DEPENDS ${LIB} ${HEADER})
-
 add_library(regex STATIC IMPORTED GLOBAL)
-add_dependencies(regex ${TARGET})
+MESSAGE(STATUS "files generated are in ${LIB} and ${HEADER}")
+add_dependencies(regex ${CMAKE_PROJECT_NAME})
 set_target_properties(regex
         PROPERTIES
-        IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/${LIB}
-        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR})
-
+        IMPORTED_LOCATION ${LIB}
+        INTERFACE_INCLUDE_DIRECTORIES ${HEADER})
 install(FILES
-        regextoken.h
-        regextoken.so
+        ${LIB}
         DESTINATION
-        /regex/
+        lib
+        )
+install(FILES
+        ${HEADER}
+        DESTINATION
+        include
         )
