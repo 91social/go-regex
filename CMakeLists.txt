@@ -22,12 +22,13 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
         COMMAND cd src && env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go get -t -v github.com/google/codesearch/index/... && cd ..
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go build -buildmode=c-shared
-        -o "${CMAKE_CURRENT_SOURCE_DIR}/${LIB}" "${CMAKE_CURRENT_SOURCE_DIR}/src/regextoken.go"
+        -o "${LIB}" "${CMAKE_CURRENT_SOURCE_DIR}/src/regextoken.go"
         ${CMAKE_GO_FLAGS}
         COMMENT "Building target ${TARGET}")
 
-
 add_library(regex STATIC IMPORTED GLOBAL)
+
+MESSAGE(STATUS "files generated are in ${LIB} and ${HEADER}")
 add_dependencies(regex ${CMAKE_PROJECT_NAME})
 set_target_properties(regex
         PROPERTIES
@@ -37,11 +38,11 @@ set_target_properties(regex
 install(FILES
         ${LIB}
         DESTINATION
-        lib
+        /usr/local/lib/regex
         )
 
 install(FILES
         ${HEADER}
         DESTINATION
-        include
+        /usr/local/include/regex
         )
