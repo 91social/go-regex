@@ -30,10 +30,10 @@ set_target_properties(regex
 install(FILES
         ${LIB}
         DESTINATION
-        lib
+        /usr/local/lib/regex
         )
+
 install(FILES
         ${HEADER}
         DESTINATION
-        include
-        )
+        /usr/local/include/regex
