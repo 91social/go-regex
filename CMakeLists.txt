@@ -36,4 +36,10 @@ install(FILES
 install(FILES
         ${HEADER}
         DESTINATION
-        /usr/local/include/regex
+        /usr/local/include/regex)
+
+
+install(FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Findregex.cmake
+        DESTINATION
+        /usr/local/lib/cmake)
