@@ -1,7 +1,7 @@
 # Go cmake configuration
 cmake_minimum_required(VERSION 3.15)
 project(go-regex)
-find_library(golang REQUIRED)
+
 set(GOPATH ${CMAKE_CURRENT_BINARY_DIR})
 set(SRCS src/regextoken.go)
 #[[go build -o ./build/regextoken.so -buildmode=c-shared ./src/regextoken.go]]
