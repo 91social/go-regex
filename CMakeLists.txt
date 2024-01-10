@@ -14,7 +14,7 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
         BYPRODUCTS ${LIB} ${HEADER}
         DEPENDS ${SRCS}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMAND cd src && env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go mod init && cd ..
+        COMMAND cd src && env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go mod init main && cd ..
         COMMAND cd src && env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go get -t -v github.com/google/codesearch/index/... && cd ..
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND env GOPATH=${CMAKE_CURRENT_SOURCE_DIR} go build -buildmode=c-shared
